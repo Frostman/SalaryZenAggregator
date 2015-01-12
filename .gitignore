@@ -4,6 +4,9 @@
 AUTHORS
 ChangeLog
 
+# testr
+.testrepository
+
 # Created by https://www.gitignore.io
 # https://www.gitignore.io/api/osx,xcode,intellij,vim,objective-c,swift,c,c++,python
 
