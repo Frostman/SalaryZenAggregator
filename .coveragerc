@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = salaryzenaggr
+omit = salaryzenaggr/tests/*
+
+[report]
+ignore-errors = True
