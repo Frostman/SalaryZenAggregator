@@ -12,12 +12,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-"""
-test_salaryzenaggr
-----------------------------------
-
-Tests for `salaryzenaggr` module.
-"""
 
 from salaryzenaggr.tests import base
 
