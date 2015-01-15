@@ -46,3 +46,5 @@ def aggregate_rates(banks, currencies, from_date, result_file, debug):
     if result_file:
         result_file.write(output)
         result_file.close()
+        print "Data successfully written to %s" % result_file
+
