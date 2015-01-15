@@ -13,6 +13,7 @@
 # under the License.
 
 
+import json
 from xml.dom import minidom as xml
 
 import requests
@@ -43,4 +44,4 @@ class XmlRestApiFetcher(RestApiFetcher):
 class JsonRestApiFetcher(RestApiFetcher):
     def _fetch_url(self, url, params=None):
         response = super(JsonRestApiFetcher, self)._fetch_url(url, params=params)
-        return json_formatter.loads(response.text)
+        return json.loads(response.text)

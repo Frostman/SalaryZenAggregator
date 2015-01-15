@@ -28,8 +28,14 @@ def _get_currency_name(currency_id):
     return currency_ids[currency_id] if currency_id in currency_ids else None
 
 
-class AlfaBankCurrencyXmlFetcher(rest_api.XmlRestApiFetcher):
-    def fetch_data(self, data, datasets=None):
+class AlfaCurrencyXmlFetcher(rest_api.XmlRestApiFetcher):
+    def get_supported_banks(self):
+        return [BANK_ALFA, BANK_CBR]
+
+    def get_supported_currencies(self):
+        return [CURRENCY_USD, CURRENCY_EURO]
+
+    def fetch_data(self, data, currencies=None, from_date=None):
         alfa_bank_url = 'http://alfabank.ru/_/_currency.xml'
         response = self._fetch_url(alfa_bank_url)
 
@@ -37,19 +43,14 @@ class AlfaBankCurrencyXmlFetcher(rest_api.XmlRestApiFetcher):
 
         for rate_tag in response.getElementsByTagName('rates'):
             rate_type = rate_tag.getAttribute('type')
-
-            items = rate_tag.getElementsByTagName('item')
-
             if rate_type not in ['non-cash', 'cb']:
                 continue
 
+            items = rate_tag.getElementsByTagName('item')
             for item in items:
                 currency = _get_currency_name(item.getAttribute('currency-id'))
-                if currency:
+                if currency and currency in currencies:
                     bank = BANK_CBR if rate_type == 'cb' else BANK_ALFA
-
-                    if (bank, currency, date_type) not in datasets:
-                        continue
 
                     write_data = functools.partial(fetchers.write_data_set,
                                                    result=data,

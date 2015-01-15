@@ -13,30 +13,42 @@
 # under the License.
 
 
-from salaryzenaggr.constants import *  # noqa
-from salaryzenaggr.fetchers import alfa_currency_xml
-from salaryzenaggr.fetchers import cbr_xml
-from salaryzenaggr.formatters import json_formatter
+import argparse
+import os
+
+from salaryzenaggr import manager
+
+
+def parse_args():
+    def is_valid_file(parser, arg):
+        if not os.access(arg, os.W_OK):
+            parser.error("No write permissions for '%s'!" % arg)
+        else:
+            return open(arg, 'w')  # return an open file handle
+
+    parser = argparse.ArgumentParser(description='Currency rates aggregator.')
+    parser.add_argument("-o", "--output", dest="result_file", required=False,
+                        help="Output file for aggregated rates", metavar="FILE",
+                        type=lambda x: is_valid_file(parser, x))
+    parser.add_argument("-b", "--banks", dest="banks", required=False, default=["alfa", "cbr"],
+                        help="List of the banks short names (alfa, cbr) to aggregate rates",
+                        nargs="+")
+    parser.add_argument("-c", "--currencies", dest="currencies", required=False, default=["usd"],
+                        help="List of currencies (usd, euro) to aggregate rates",
+                        nargs="+")
+    parser.add_argument("-f", "--from-date", dest="from_date", required=False, default="30.08.2014",
+                        help="Start aggregation of historic data from this date")
+    parser.add_argument("-d", "--debug", dest="debug", required=False, default=False,
+                        action="store_true",
+                        help="Enable debug mode to print json to output too")
+    args = parser.parse_args()
+
+    return args
 
 
 def main():
-    print "Aggregate!"
-
-    a = alfa_currency_xml.AlfaBankCurrencyXmlFetcher()
-    res = {}
-    a.fetch_data(res, datasets=(
-        (BANK_CBR, CURRENCY_USD, DATA_TYPE_CURRENT),
-        (BANK_CBR, CURRENCY_EURO, DATA_TYPE_CURRENT),
-        (BANK_ALFA, CURRENCY_USD, DATA_TYPE_CURRENT),
-        (BANK_ALFA, CURRENCY_EURO, DATA_TYPE_CURRENT),
-    ))
-    b = cbr_xml.CbrXmlFetcher()
-    b.fetch_data(res, datasets=(
-        (BANK_CBR, CURRENCY_USD, DATA_TYPE_HISTORIC, "30.08.2014"),
-        (BANK_CBR, CURRENCY_EURO, DATA_TYPE_HISTORIC, "30.08.2014"),
-    ))
-
-    print json_formatter.JsonPrettyFormatter().format_data(res)
+    args = parse_args()
+    manager.aggregate_rates(**vars(args))
 
 
 if __name__ == "__main__":

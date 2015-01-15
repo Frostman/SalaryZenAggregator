@@ -4,7 +4,7 @@
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -58,5 +58,13 @@ def _cleanup_val(val):
 @abstractclass()
 class Fetcher(object):
     @required
-    def fetch_data(self, data, datasets=None):
+    def get_supported_banks(self):
+        raise NotImplemented()
+
+    @required
+    def get_supported_currencies(self):
+        raise NotImplemented()
+
+    @required
+    def fetch_data(self, data, currencies, from_date=None):
         raise NotImplemented()

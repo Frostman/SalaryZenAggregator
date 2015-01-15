@@ -47,20 +47,16 @@ def _xml_get_text(nodelist):
     return ''.join(rc)
 
 
-class CbrXmlFetcher(rest_api.XmlRestApiFetcher):
-    def fetch_data(self, data, datasets=None):
-        for dataset in datasets:
-            if dataset[0] != BANK_CBR:
-                continue
-            if dataset[1] not in _cbr_currencies:
-                continue
-            if dataset[2] != DATA_TYPE_HISTORIC:
-                continue
-            if len(dataset) < 4:
-                continue
-            from_date = dataset[3]
-            to_date = dataset[4] if len(dataset) == 5 else _tomorrow()
-            currency = dataset[1]
+class CbrXmlDynamicFetcher(rest_api.XmlRestApiFetcher):
+    def get_supported_banks(self):
+        return [BANK_CBR]
+
+    def get_supported_currencies(self):
+        return [CURRENCY_USD, CURRENCY_EURO]
+
+    def fetch_data(self, data, currencies=None, from_date=None):
+        for currency in currencies:
+            to_date = _tomorrow()
 
             write_data = functools.partial(fetchers.write_data_set,
                                            result=data,
