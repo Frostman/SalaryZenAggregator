@@ -6,5 +6,5 @@ git pull origin
 virtualenv venv
 . venv/bin/activate
 pip install -U .
-salarazen-aggregate "$@"
+salaryzen-aggregate "$@"
 deactivate
