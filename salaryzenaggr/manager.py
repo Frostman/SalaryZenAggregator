@@ -13,6 +13,7 @@
 # under the License.
 
 from datetime import datetime
+import time
 
 from stevedore import extension
 
@@ -37,7 +38,9 @@ def aggregate_rates(banks, currencies, from_date, result_file, debug):
         fetcher.fetch_data(res, currencies, from_date)
 
     formatter = json_formatter.JsonPrettyFormatter if debug else json_formatter.JsonFormatter
+    res['aggregated_at'] = int(time.time())
     output = formatter().format_data(res)
+
     if debug:
         print output
 
