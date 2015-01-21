@@ -33,7 +33,7 @@ def parse_args():
     parser.add_argument("-b", "--banks", dest="banks", required=False, default=["alfa", "cbr"],
                         help="List of the banks short names (alfa, cbr) to aggregate rates",
                         nargs="+")
-    parser.add_argument("-c", "--currencies", dest="currencies", required=False, default=["usd"],
+    parser.add_argument("-c", "--currencies", dest="currencies", required=False, default=["usd", "euro"],
                         help="List of currencies (usd, euro) to aggregate rates",
                         nargs="+")
     parser.add_argument("-f", "--from-date", dest="from_date", required=False, default="30.08.2014",
