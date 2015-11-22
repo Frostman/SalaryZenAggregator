@@ -49,7 +49,8 @@ def _xml_get_text(nodelist):
 
 class CbrXmlDynamicFetcher(rest_api.XmlRestApiFetcher):
     def get_supported_banks(self):
-        return [BANK_CBR]
+        # return [BANK_CBR]
+        return []
 
     def get_supported_currencies(self):
         return [CURRENCY_USD, CURRENCY_EURO]
