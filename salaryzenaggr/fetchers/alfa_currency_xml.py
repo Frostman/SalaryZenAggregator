@@ -39,7 +39,7 @@ class AlfaCurrencyXmlFetcher(rest_api.XmlRestApiFetcher):
         alfa_bank_url = 'http://alfabank.ru/_/_currency.xml'
         response = self._fetch_url(alfa_bank_url)
 
-        date_type = DATA_TYPE_CURRENT
+        data_type = DATA_TYPE_CURRENT
 
         for rate_tag in response.getElementsByTagName('rates'):
             rate_type = rate_tag.getAttribute('type')
@@ -56,7 +56,7 @@ class AlfaCurrencyXmlFetcher(rest_api.XmlRestApiFetcher):
                                                    result=data,
                                                    bank=bank,
                                                    currency=currency,
-                                                   data_type=date_type)
+                                                   data_type=data_type)
 
                     if item.getAttribute('value'):
                         write_data(exchange_type=EXCHANGE_RATE, value=item.getAttribute('value'))
